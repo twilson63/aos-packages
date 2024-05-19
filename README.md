@@ -40,6 +40,8 @@ The Test Unit Module provides tools for creating and running unit tests for your
 - **Assertions**: Functions to check the correctness of your code.
 - **Test Runner**: A simple framework to execute tests and report results.
 
+[Learn More](packages/test-unit)
+
 ### dbAdmin Module 🛠️
 
 The dbAdmin Module offers functionalities for managing SQLite databases, including:
@@ -47,6 +49,9 @@ The dbAdmin Module offers functionalities for managing SQLite databases, includi
 - **List Tables**: Retrieve a list of tables in the database.
 - **Get Record Count**: Get the number of records in a specified table.
 - **Execute Queries**: Run custom SQL queries against the database.
+
+[Learn More](packages/db-admin)
+
 
 ### [Other Modules] 🔧
 
