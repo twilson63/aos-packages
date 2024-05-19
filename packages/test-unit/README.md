@@ -75,7 +75,3 @@ print(results)
 ## License
 
 This project is licensed under the MIT License.
-
----
-
-This README provides a clear and concise guide on how to use the Lua test module, including installation, usage, and an example.

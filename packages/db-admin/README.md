@@ -103,7 +103,3 @@ end
 ## License
 
 This project is licensed under the MIT License.
-
----
-
-This README provides a comprehensive guide on how to use the `dbAdmin` module, including installation, usage, and a complete example.

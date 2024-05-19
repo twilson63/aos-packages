@@ -6,8 +6,8 @@ Welcome to the aos packages repo! This project contains a collection of lua modu
 
 - [Repository Structure 🗂️](#repository-structure)
 - [Modules 🧩](#modules)
-  - [Test Unit Module 🧪](#test-unit-module)
-  - [dbAdmin Module 🛠️](#dbadmin-module)
+  - [Test Unit Module 🧪](#test-unit-module-)
+  - [dbAdmin Module 🛠️](#dbadmin-module-%EF%B8%8F)
   - [Other Modules 🔧](#other-modules)
 - [Getting Started 🚀](#getting-started)
 - [Contributing 🤝](#contributing)
