@@ -1,5 +1,7 @@
 local allocator = { _version = "0.0.1" }
 
+local bint = require('.bint')(256)
+
 -- utility functions
 local function reduce(func, initial, t)
     local result = initial
@@ -41,25 +43,25 @@ end
 
 
 function allocator.allocate(balances, reward)
-    local function add(a, b) return a + b end
+    local function add(a, b) return bint(a) + bint(b) end
 
     -- Calculate total positive balances
-    local total = reduce(add, 0, values(balances))
+    local total = reduce(add, bint(0), values(balances))
     
     -- Allocate rewards based on balances
     local allocation = mergeAll(
         reduce(function(a, s)
             local asset = s[1]
-            local balance = s[2]
+            local balance = bint(s[2])
             
-            if balance < 1 then
+            if balance < bint(1) then
                 return a
             end
             
-            local pct = (balance / total) * 100
-            local coins = math.floor(reward * (pct / 100) + 0.5) -- Round to nearest integer
+            local pct = (balance / total) * bint(100)
+            local coins = math.floor(bint(reward) * (pct / bint(100)) + (bint(1) / bint(2))) -- Round to nearest integer
             
-            table.insert(a, {[asset] = coins})
+            table.insert(a, {[asset] = tostring(coins)})
             return a
         end, {}, (function()
             local result = {}
