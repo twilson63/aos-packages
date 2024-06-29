@@ -16,26 +16,27 @@ Either.__index = Either
 
 -- Constructor for Left
 function Either.Left(value)
-    return setmetatable({ isLeft = true, value = value }, Either)
+    return setmetatable({ _isLeft = true, value = value }, Either)
 end
 
 -- Constructor for Right
 function Either.Right(value)
-    return setmetatable({ isLeft = false, value = value }, Either)
+    return setmetatable({ _isLeft = false, value = value }, Either)
 end
 
 -- Method to check if it's Left
 function Either:isLeft()
-    return self.isLeft
+  return self._isLeft
 end
 
 -- Method to check if it's Right
 function Either:isRight()
-    return not self.isLeft
+  return not self._isLeft
 end
 
 -- Method to map over Right value
 function Either:map(fn)
+    assert(type(fn) == "function", "function is required!")
     if self:isRight() then
         return Either.Right(fn(self.value))
     else
@@ -45,6 +46,7 @@ end
 
 -- Method to map over Left value
 function Either:mapLeft(fn)
+    assert(type(fn) == "function", "function is required!")
     if self:isLeft() then
         return Either.Left(fn(self.value))
     else
@@ -72,6 +74,7 @@ end
 
 -- Method to chain operations (flatMap)
 function Either:chain(fn)
+    assert(type(fn) == "function", "function is required!")
     if self:isRight() then
         return fn(self.value)
     else
@@ -81,7 +84,7 @@ end
 
 -- Method to handle both cases
 function Either:fold(leftFn, rightFn)
-    if self.isLeft then
+    if self:isLeft() then
         return leftFn(self.value)
     else
         return rightFn(self.value)
