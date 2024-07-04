@@ -13,7 +13,7 @@ The `Either` ADT (Algebraic Data Type) allows developers to create functional pi
 with APM
 
 ```lua
-APM.install('@rakis/either')
+APM.install('@rakis/Either')
 ```
 
 ## Usage
@@ -93,7 +93,7 @@ local value = right:getLeftOrElse("no error") -- "no error"
 Here's a full example demonstrating the usage of the `Either` library:
 
 ```lua
-local Either = require("Either")
+local Either = require("@rakis/Either")
 
 local function divide(a, b)
     if b == 0 then
