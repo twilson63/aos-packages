@@ -99,6 +99,19 @@ for _, row in ipairs(results) do
         print(k, v)
     end
 end
+```
+
+## Testing
+
+```sh
+aos dbadmin-tests --sqlite
+```
+
+```lua
+.load-blueprint apm
+APM.install('@rakis/test-unit')
+.load src/run_tests.lua
+```
 
 ## License
 
