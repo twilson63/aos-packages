@@ -12,7 +12,13 @@ This Lua test module provides a simple framework for defining and running unit t
 
 ## Installation
 
-Copy the `Test.lua` file to your project directory.
+Install with apm
+
+```
+.load-blueprint apm
+APM.install('@rakis/test-unit')
+```
+
 
 ## Usage
 
@@ -21,7 +27,7 @@ Copy the `Test.lua` file to your project directory.
 Create a new test suite with a given name.
 
 ```lua
-local Test = require("Test")
+local Test = require("@rakis/test-unit")
 local myTests = Test.new("My Test Suite")
 ```
 
