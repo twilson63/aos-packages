@@ -24,6 +24,26 @@ t:add("Count Records", function ()
   assert(results == 3, "3 records found in test")
 end)
 
+-- Test: Apply Insert
+t:add("Apply Insert", function()
+  dbAdmin:apply('INSERT INTO test (content) VALUES (?);', {"Hello World"})
+  local results = dbAdmin:exec('SELECT * FROM test WHERE content = "Hello World";')
+  assert(#results == 1, "Expected 1 record with content 'Hello World'")
+end)
+
+-- Test: Apply Update
+t:add("Apply Update", function()
+  dbAdmin:apply('UPDATE test SET content = ? WHERE content = ?;', {"Updated Content", "Hello World"})
+  local results = dbAdmin:exec('SELECT * FROM test WHERE content = "Updated Content";')
+  assert(#results == 1, "Expected 1 record with updated content 'Updated Content'")
+end)
+
+-- Test: Apply Delete
+t:add("Apply Delete", function()
+  dbAdmin:apply('DELETE FROM test WHERE content = ?;', {"Updated Content"})
+  local results = dbAdmin:exec('SELECT * FROM test WHERE content = "Updated Content";')
+  assert(#results == 0, "Expected no records with content 'Updated Content'")
+end)
 
 return t:run()
 
