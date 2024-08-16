@@ -44,6 +44,13 @@ t:add("Apply Delete", function()
   local results = dbAdmin:exec('SELECT * FROM test WHERE content = "Updated Content";')
   assert(#results == 0, "Expected no records with content 'Updated Content'")
 end)
+t:add("Apply Select", function ()
+  local results = dbAdmin:select('SELECT * FROM test WHERE content = ? OR content = ?;', {'Hello ao!!!', "Hello Sqlite3"})
+  assert(#results == 2, "Expected 2 records with content 'Hello ao!!!' OR 'Hello Sqlite3'")
+  assert(results[1].content == 'Hello Sqlite3', "Record content should be 'Hello Sqlite3'")
+  assert(results[2].content == 'Hello ao!!!', "Record content should be 'Hello ao!!!'")
+end)
+
 
 return t:run()
 
