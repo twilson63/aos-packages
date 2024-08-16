@@ -52,6 +52,33 @@ local count = admin:count('your_table_name')
 print(string.format("Record count in 'your_table_name': %d", count))
 ```
 
+### Applying Inserts, Updates and Deletes
+
+Insert a record using parameters
+
+```lua
+admin:apply('insert into names (id, name) values (NULL, ?));', { "SpongeBob" })
+admin:apply('insert into names (id, name) values (NULL, ?));', { "Patrick" })
+```
+
+Update a record using parameters
+
+```lua
+admin:apply('update names set (name = ? ) where id = ?;', { "SpongeBob", 1 })
+admin:apply('update names set (name = ? ) where id = ?;', { "Patrick", 2 })
+```
+
+```lua
+admin:apply('delete from names where id = ?;', { 1 })
+admin:apply('delete from names where id = ?;', { 2 })
+```
+
+### SQL Selects using parameters
+
+```lua
+local results = admin:select('select * from names where id = ?', { 1 })
+```
+
 ### Executing SQL Queries
 
 Execute a given SQL query and retrieve the results.
