@@ -50,4 +50,30 @@ function dbAdmin:apply(sql, values)
     stmt:finalize()
 end
 
+-- Function to apply SQL SELECT statements with parameter binding
+function dbAdmin:select(sql, values)
+   local sqlite3 = require('lsqlite3')
+   local DONE = sqlite3.DONE
+   assert(type(sql) == 'string', 'SQL MUST be a String')
+   assert(type(values) == 'table', 'values MUST be an array of values')
+
+   local stmt = self.db:prepare(sql)
+   stmt:bind_values(table.unpack(values))
+
+   local results = {}
+   while true do
+       local row = stmt:step()
+       if row == sqlite3.ROW then
+           table.insert(results, stmt:get_named_values()) 
+       elseif row == DONE then
+           break
+       else
+           error(sql .. ' statement failed because ' .. self.db:errmsg())
+       end
+   end
+
+   stmt:finalize()
+   return results
+end
+
 return dbAdmin
