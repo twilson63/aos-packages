@@ -1,9 +1,8 @@
 # Allocator
 
-Allocate a reward to a set of balances. When wanting to distribute rewards to a set of addresses based on the weight of their balance, this package does exactly that. 
+Allocate a reward to a set of balances. When wanting to distribute rewards to a set of addresses based on the weight of their balance, this package does exactly that.
 
 ## Usage
-
 
 ```lua
 -- Example usage

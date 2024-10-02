@@ -59,8 +59,8 @@ function allocator.allocate(balances, reward)
             end
             
             local pct = (balance / total) * bint(100)
-            local coins = math.floor(bint(reward) * (pct / bint(100)) + (bint(1) / bint(2))) -- Round to nearest integer
-            
+            local coins = math.floor(bint(reward) * (pct / bint(100)))
+
             table.insert(a, {[asset] = tostring(coins)})
             return a
         end, {}, (function()
@@ -77,7 +77,7 @@ function allocator.allocate(balances, reward)
     local k = keys(allocation)
     local i = 1
     while remainder > 0 do
-        allocation[k[i]] = allocation[k[i]] + 1
+        allocation[k[i]] = tostring(bint(allocation[k[i]]) + bint(1))
         remainder = remainder - 1
         i = (i % #k) + 1
     end
