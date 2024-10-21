@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ankushKun/apm-cli/main/apm.schema.json",
+  "name": "markdown",
+  "vendor": "@apm",
+  "description": "markdown parser",
+  "main": "markdown.lua",
+  "version": "1.0.1",
+  "repository": "https://github.com/twilson63/aos-packages",
+  "license": "MIT",
+  "keywords": [],
+  "authors": [],
+  "warnings": {
+    "modifiesGlobalState": false,
+    "installMessage": ""
+  },
+  "dependencies": {}
+}
