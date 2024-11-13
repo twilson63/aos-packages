@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ankushKun/apm-cli/main/apm.schema.json",
+  "name": "allocator2",
+  "vendor": "@rakis",
+  "description": "weighted distribution allocation library",
+  "main": "src/main.lua",
+  "version": "1.0.0",
+  "repository": "https://github.com/twilson63/aos-packages",
+  "license": "MIT",
+  "keywords": [],
+  "authors": [],
+  "warnings": {
+    "modifiesGlobalState": false,
+    "installMessage": ""
+  },
+  "dependencies": {}
+}
