@@ -1,3 +1,5 @@
+DEPRECATED
+
 # Lua Test Module
 
 This Lua test module provides a simple framework for defining and running unit tests. It allows you to create test suites, add test cases, and run the tests with a summary of the results.
