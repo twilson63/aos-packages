@@ -5,7 +5,7 @@ Pipe is a lightweight Lua library for handling CSV data with two main functions:
 ## Overview
 
 - **send:**  
-  Converts a Lua table into an array of CSV strings using `csv.createFromTable`, then pushes these CSV strings onto a queue and dispatches them to a target.
+  Converts a Lua table into an array of CSV strings using `csv.createFromTable` or `csv.createKV`, then pushes these CSV strings onto a queue and dispatches them to a target.
 
 - **receive:**  
   Sets up a handler to receive batched CSV data strings, concatenates and parses them into a table, and calls the provided handler with the fully parsed table. Additionally, it accepts a `patternMatcher` argument to customize how the piped data is matched before processing.
@@ -15,7 +15,9 @@ Pipe is a lightweight Lua library for handling CSV data with two main functions:
 Simply drop the `pipe.lua` file in your project directory and require it:
 
 ```lua
-local pipe = require("pipe")
+.load-blueprint apm
+apm.install [[@rakis/pipe]]
+local pipe = require("@rakis/pipe")
 ```
 
 ## Usage
@@ -24,16 +26,19 @@ local pipe = require("pipe")
 
 ```lua
 local data = {
-  {"name", "age"},
-  {"Alice", 30},
-  {"Bob", 25}
+  {
+    name = "Alice",
+    age = 30
+  },
+  {
+    name = "Bob",
+    age = 25
+  }
 }
 
-local target = "queue_identifier"
+local target = "AO_Process_Identifier"
 pipe.send(data, target)
 ```
-
-This call uses csv.createFromTable internally to convert the table into CSV strings, which are then queued and dispatched to the specified target.
 
 ### Receiving Data
 
@@ -45,31 +50,31 @@ local function dataHandler(parsedTable)
   end
 end
 
-local function myPatternMatcher(csvString)
-  -- Customize matching logic here; return true if it matches the desired pattern
-  return csvString:find("pattern") ~= nil
-end
-
-pipe.receive(dataHandler, myPatternMatcher)
+pipe.receive({ From = "AO_Process_Id"}, datahandler)
 ```
 
 In this example, the receive function sets up a handler that waits for a batch of CSV data strings, uses myPatternMatcher to filter or match the data, then concatenates and parses them into a Lua table before calling your dataHandler.
 
 ## API
 
-pipe.send(dataTable, target)
-	•	Parameters:
-	•	dataTable: A table of data to be converted to CSV.
-	•	target: The destination queue or identifier.
-	•	Behavior:
-Uses csv.createFromTable to generate CSV strings from dataTable, which are then pushed onto the queue for the given target.
+pipe.send(dataTable, target, options?)
+
+Parameters:
+
+* dataTable: A table of data to be converted to CSV.
+* target: The destination queue or identifier.
+* options (_optional_): 
+  - page-size: the number of rows to include in each page, default is 10,000
+  - labels: table array of specific properties from a table object you like to include
 
 pipe.receive(handler, patternMatcher)
-	•	Parameters:
-	•	handler: A function that processes the parsed table.
-	•	patternMatcher: A function to customize the matching of piped data strings before processing.
-	•	Behavior:
-Receives a batch of CSV data strings, uses the patternMatcher to filter or match the appropriate data, concatenates and parses the matched CSV strings into a Lua table, and passes this table to the handler function.
+
+Parameters:
+
+* patternMatcher: A table or function to customize the matching of piped data strings before processing.
+* handler: A function that processes the parsed table.
+* options (_optional_): 
+  - format: 'key-value' or 'normal'
 
 License
 
