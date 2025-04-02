@@ -76,6 +76,16 @@ Parameters:
 * options (_optional_): 
   - format: 'key-value' or 'normal'
 
+## Testing
+
+Dependencies: NodeJS
+
+```bash
+cd test
+yarn
+yarn test
+```
+
 License
 
 This project is licensed under the MIT License.
