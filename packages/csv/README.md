@@ -8,30 +8,22 @@ A lightweight CSV utility for Lua that parses CSV strings and creates CSV conten
 - **CSV Creation (Key-Value):** Creates CSV output from a key-value table (both keys and values must be strings).
 - **Paging:** Splits output into pages (default 10,000 lines per page).
 
-## Dependencies
-This module requires a **Utils** library with the following functions:
-- `Utils.compose`
-- `Utils.map`
-- `Utils.values`
-- `Utils.keys`
-
-Ensure these are available in your project.
-
 ## Installation
-1. Place the `csv.lua` file in your project directory.
-2. Require the module in your Lua code:
 
 ```lua
+.load-blueprint apm
+apm.install [[@rakis/csv]]
+
 local csv = require("@rakis/csv")
 ```
 
-API Usage
+## API Usage
 
 Parsing CSV Strings
 
 Convert a CSV string into a table structure.
 
-local data = csv.parser("name,age\nAlice,30\nBob,25")
+local data = csv.parser("Alice,30\nBob,25")
 -- data becomes a table with each row split into columns.
 
 Creating CSV from a Table of Records
@@ -61,7 +53,9 @@ local pages = csv.createKV(kv)
 -- pages is an array of CSV strings.
 ```
 
-Notes
-	•	The CSV parsing is basic—splitting on commas and newlines—and does not handle quoted fields.
-	•	Adjust the pageSize parameter if you expect large CSV outputs.
+## Test
 
+```bash
+cd test
+yarn && yarn test
+```
