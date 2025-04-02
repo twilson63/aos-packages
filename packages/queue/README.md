@@ -35,3 +35,10 @@ local template = { Total = 3 }  -- Customize as needed
 local action = "processItem"
 myQueue:dispatch(template, action, 1)
 ```
+
+## Test
+
+```bash
+cd test
+npm i && npm t
+```

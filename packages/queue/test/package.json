@@ -1,0 +1,16 @@
+{
+  "type": "module",
+  "name": "test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test --experimental-wasm-memory64"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@permaweb/loco": "^0.0.20"
+  }
+}
