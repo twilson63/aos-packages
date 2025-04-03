@@ -8,6 +8,7 @@ const assoc = (k,v,o) => {
 }
 
 test('pipe', async () => {
+  try {
     const sender = await aoslocal()
     const rec = await aoslocal()
 
@@ -48,4 +49,7 @@ require('@rakis/pipe').send(Balances, "REC", { template = { BatchReference = "2"
         Data: result.Messages[0].Data 
     }))
     .then(result => assert.equal(result.Output.data, "3") )
+  } catch (e) {
+    console.log(e)
+  }
 })

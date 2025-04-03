@@ -67,6 +67,7 @@ Parameters:
   - page-size: the number of rows to include in each page, default is 10,000
   - labels: table array of specific properties from a table object you like to include
   - template: a table you want merged into the dispatch of each page
+  - action: specify a custom action used to dispatch pages
 
 pipe.receive(handler, patternMatcher)
 
@@ -76,6 +77,7 @@ Parameters:
 * handler: A function that processes the parsed table.
 * options (_optional_): 
   - format: 'key-value' or 'normal'
+  - action: specify a custom action for handler
 
 ## Testing
 

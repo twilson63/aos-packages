@@ -290,7 +290,8 @@ local function mergeRight(t1, t2)
 local validOptions = zuko({
     ['page-size'] = { type = 'number' },
     labels = { type = 'table', ["*"] = 'string' },
-    template = { type = 'table', ["*"] = 'string' }
+    template = { type = 'table', ["*"] = 'string' },
+    action = 'string'
 })
 --- 
 -- Sends data by converting a table to CSV strings and pushing them to the specified target queue.
@@ -311,7 +312,8 @@ function pipe.send(dataTable, target, options)
   local _options = {
     ['page-size'] = options and options['page-size'],
     labels = options and options['labels'] or nil,
-    template = options and options['template'] or {}
+    template = options and options['template'] or {},
+    action = options and options['action'] or 'Pipe-Data'
   }
   
   if isArray(dataTable) then
@@ -324,7 +326,7 @@ function pipe.send(dataTable, target, options)
     Format = "CSV",
     Target = target,
     Total = tostring(#pages),
-    Action = "Pipe-Data"
+    Action = _options.action 
   }, _options.template), "Pipe-Next", 1)
   batch:clear()
   print('piped data to target ' .. target)
@@ -338,10 +340,11 @@ end
 -- @param handler A function that will be called with the parsed table.
 -- @param patternMatcher (Optional) A function that takes a CSV line and returns true if the line should be processed.
 function pipe.receive(patternMatcher, complete, options)
+  assert(type(complete) == 'function', 'onComplete should be a function')
   local pages = {}
-  local _options = options or { format = "none" }
+  local _options = mergeRight({ format = "none", action = "Pipe-Data" }, options or {})
 
-  Handlers.add("Pipe-Data", function (msg)
+  Handlers.add(_options.action, function (msg)
     if msg.Action ~= "Pipe-Data" then 
         return false
     end
@@ -365,6 +368,8 @@ function pipe.receive(patternMatcher, complete, options)
         pages = nil
         collectgarbage()
         pages = {}
+        -- remove pipe handler
+        Handlers.remove(_options.action)
     end
   end)
 end
