@@ -24,6 +24,7 @@ end)
 print(tostring(#Utils.keys(Balances)))
     `).then(result => {
         assert.equal(result.Output.data, "0")
+        // nice 2 spaces!
     })
 
    // send some data
@@ -33,8 +34,14 @@ Balances = {
   Curly = "20",
   Moe = "30"
 }
-require('@rakis/pipe').send(Balances, "REC")
+require('@rakis/pipe').send(Balances, "REC", { template = { BatchReference = "2" }})
     `)
+    .then(x => {
+      const tags = x.Messages[0].Tags.reduce((a,t) => assoc(t.name, t.value, a), {})
+      assert.equal(tags.BatchReference, "2")
+      return x
+    })
+    //.then(x => (console.log(x.Output.data), x))
     .then(result => rec.send({ 
         ...result.Messages[0].Tags.reduce((a,t) => assoc(t.name, t.value, a), {}),
         Target: "TEST_PROCESS_ID", 

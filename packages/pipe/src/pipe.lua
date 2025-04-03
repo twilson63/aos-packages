@@ -1,3 +1,11 @@
+--[[
+# pipe 
+
+This module allows you to send and receive large data in chunks
+
+]]
+
+--csv module
 local csv = {}
 
 local _NEWLINE = '\n'
@@ -93,6 +101,7 @@ function csv.createKV(data, pageSize)
   return pages
 end
 
+-- queue module
 local Queue = {}
 Queue.__index = Queue
 
@@ -148,6 +157,88 @@ function Queue:dispatch(template, action, idx)
     end
 end
 
+-- zuko.lua 
+
+local function validate_field(value, rule, validator_fn)
+  if rule.required and value == nil then
+    return "is required"
+  elseif value ~= nil then
+    if rule.type and type(value) ~= rule.type then
+      return "must be of type " .. rule.type
+    end
+  
+    if rule.type == "number" then
+      if rule.min and value < rule.min then
+        return "must be greater than or equal to " .. rule.min
+      elseif rule.max and value > rule.max then
+        return "must be less than or equal to " .. rule.max
+      end
+    end
+
+    if rule.type == "string" and rule.pattern then
+      if not string.match(value, rule.pattern) then
+        return "does not match required pattern"
+      end
+    end
+  
+    if rule.type == "table" then
+      if rule.schema then
+        local nested_validator = validator_fn(rule.schema)
+        local valid, nested_errors = nested_validator(value)
+        if not valid then
+          return nested_errors
+        end
+      end
+
+      if rule.array then
+        if type(value) ~= "table" then
+          return "must be an array"
+        end
+        for index, item in ipairs(value) do
+          local item_error = validate_field(item, rule.array, validator_fn)
+          if item_error then
+            return {[index] = item_error}
+          end
+        end
+      end
+
+      local wildcard = rule["[*]"] or rule["*"]
+      if wildcard then
+        wildcard = { type = wildcard }
+        for key, val in pairs(value) do
+          -- Skip keys already defined in the schema.
+          if not (rule.schema and rule.schema[key]) then
+            local err = validate_field(val, wildcard, validator_fn)
+            if err then
+              return { [key] = err }
+            end
+          end
+        end
+      end
+    end
+    
+  end
+  return nil
+end
+  
+local function zuko(rules)
+  local function validator(input)
+    local errors = {}
+
+    for field, rule in pairs(rules) do
+      local err = validate_field(input[field], rule, zuko)
+      if err then
+        errors[field] = err
+      end
+    end
+  
+    return next(errors) == nil, errors
+  end
+  
+  return validator
+end 
+  
+
 local pipe = { _version = "0.0.3" }
 
 local function isArray(table)
@@ -179,32 +270,62 @@ local function concatTables(tables)
     return result
 end
 
+local function mergeRight(t1, t2)
+    local result = {}
+    -- copy all values from t1
+    for k, v in pairs(t1) do
+      result[k] = v
+    end
+    -- merge values from t2, overriding as needed
+    for k, v in pairs(t2) do
+      if type(v) == "table" and type(result[k]) == "table" then
+        result[k] = mergeRight(result[k], v)
+      else
+        result[k] = v
+      end
+    end
+    return result
+  end
+
+local validOptions = zuko({
+    ['page-size'] = { type = 'number' },
+    labels = { type = 'table', ["*"] = 'string' },
+    template = { type = 'table', ["*"] = 'string' }
+})
 --- 
 -- Sends data by converting a table to CSV strings and pushing them to the specified target queue.
 -- @param dataTable A table of data to convert.
 -- @param target The destination queue identifier.
 -- @param action The action value for the message.
 function pipe.send(dataTable, target, options)
+  assert(type(dataTable) == 'table', 'dataTable should be a table')
+  assert(type(target) == 'string', 'target should be a string')
+  if options then
+    assert(type(options) == 'table', 'options should be a table')
+    local _valid, _err = validOptions(options)
+    assert(_valid, 'Options format error: ' .. require('json').encode(_err))
+  end
+
   local batch = Queue.new()
   local pages = {}
   local _options = {
     ['page-size'] = options and options['page-size'],
-    labels = options and options['labels'] or nil
+    labels = options and options['labels'] or nil,
+    template = options and options['template'] or {}
   }
-
-
+  
   if isArray(dataTable) then
     pages = csv.createFromTable(dataTable, _options.labels, _options['page-size'])
   else
     pages = csv.createKV(dataTable)
   end
   Utils.map(function (page) batch:push(page) end, pages)
-  batch:dispatch({
+  batch:dispatch(mergeRight({
     Format = "CSV",
     Target = target,
     Total = tostring(#pages),
     Action = "Pipe-Data"
-  }, "Pipe-Next", 1)
+  }, _options.template), "Pipe-Next", 1)
   batch:clear()
   print('piped data to target ' .. target)
 end

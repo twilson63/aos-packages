@@ -4,6 +4,7 @@ local zuko = require('src.main')
 local rules = {
     username = { type = "string", required = true },
     age = { type = "number", min = 0, max = 120, required = true },
+    foo = { type = "table", ["*"] = "string" },
     contact = {
       type = "table",
       required = true,
@@ -37,16 +38,22 @@ local rules = {
         city = "Moonville"
       }
     },
-    colors = {'red'}
+    colors = {'red'},
+    foo = { x = 1 }
   }
   
   local valid, errors = validate(input)
   
+  print('zuko rules')
+  print(rules)
+
+  print('input')
+
+  print(input)
   
+  print('validation errors')
   if not valid then
-    for field, err in pairs(errors) do
-      print(field .. ' - ' .. err)
-    end
+    print(errors)
   else
     print("Validation succeeded!")
   end

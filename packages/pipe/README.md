@@ -66,6 +66,7 @@ Parameters:
 * options (_optional_): 
   - page-size: the number of rows to include in each page, default is 10,000
   - labels: table array of specific properties from a table object you like to include
+  - template: a table you want merged into the dispatch of each page
 
 pipe.receive(handler, patternMatcher)
 
