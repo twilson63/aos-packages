@@ -1,0 +1,17 @@
+{
+    "$schema": "https://raw.githubusercontent.com/ankushKun/apm-cli/main/apm.schema.json",
+    "name": "pipe",
+    "vendor": "@rakis",
+    "description": "pipe datasets to processes",
+    "main": "src/pipe.lua",
+    "version": "0.0.5",
+    "repository": "https://github.com/twilson63/aos-packages",
+    "license": "MIT",
+    "keywords": [],
+    "authors": [],
+    "warnings": {
+        "modifiesGlobalState": false,
+        "installMessage": ""
+    },
+    "dependencies": {}
+}

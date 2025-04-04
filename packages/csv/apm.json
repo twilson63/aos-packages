@@ -1,0 +1,17 @@
+{
+    "$schema": "https://raw.githubusercontent.com/ankushKun/apm-cli/main/apm.schema.json",
+    "name": "csv",
+    "vendor": "@rakis",
+    "description": "create and parse csv data",
+    "main": "src/csv.lua",
+    "version": "0.0.1",
+    "repository": "https://github.com/twilson63/aos-packages",
+    "license": "MIT",
+    "keywords": [],
+    "authors": [],
+    "warnings": {
+      "modifiesGlobalState": false,
+      "installMessage": ""
+    },
+    "dependencies": {}
+  }

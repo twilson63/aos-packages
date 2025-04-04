@@ -1,0 +1,17 @@
+{
+    "$schema": "https://raw.githubusercontent.com/ankushKun/apm-cli/main/apm.schema.json",
+    "name": "queue",
+    "vendor": "@rakis",
+    "description": "push and pop data on a queue, then dispatch to other processes",
+    "main": "src/queue.lua",
+    "version": "0.0.1",
+    "repository": "https://github.com/twilson63/aos-packages",
+    "license": "MIT",
+    "keywords": [],
+    "authors": [],
+    "warnings": {
+      "modifiesGlobalState": false,
+      "installMessage": ""
+    },
+    "dependencies": {}
+  }

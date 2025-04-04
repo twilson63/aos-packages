@@ -1,0 +1,13 @@
+{
+  "type": "module",
+  "name": "test-pipe",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@permaweb/loco": "^0.0.20"
+  },
+  "scripts": {
+    "test": "node --test --experimental-wasm-memory64"
+  }
+}
